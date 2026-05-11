@@ -11,25 +11,35 @@ return new class extends Migration
      */
     public function up(): void
     {
-        schema::create('tingkat', function(Blueprint $table){
+        Schema::create('tingkat', function (Blueprint $table){
+            $table->id();
             $table->string('kode', 5)->unique();
-            $table->string('name',50);
+            $table->string('nama', 50);
             $table->timestamps();
         });
 
-        schema::create('jurusan', function(Blueprint $table){
+        Schema::create('jurusan', function (Blueprint $table){
             $table->id();
             $table->foreignId('tingkat_id')->constrained('tingkat')->cascadeOnDelete();
             $table->string('kode', 5)->unique();
-            $table->string('name',50);
+            $table->string('nama', 50);
             $table->timestamps();
         });
 
-        schema::create('kelas', function(Blueprint $table){
+        Schema::create('kelas', function (Blueprint $table){
             $table->id();
             $table->foreignId('tingkat_id')->constrained('tingkat')->cascadeOnDelete();
-            $table->string('kode', 5)->unique();
-            $table->string('name',50);
+            $table->foreignId('jurusan_id')->nullable()->constrained('jurusan')->cascadeOnDelete();
+            $table->string('nama', 20);
+            $table->integer('kapasitas')->default(30);
+            $table->boolean('aktif')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('tahun_ajaran', function (Blueprint $table){
+            $table->id();
+            $table->string('nama', 20)->unique();
+            $table->boolean('aktif')->default(false);
             $table->timestamps();
         });
     }
